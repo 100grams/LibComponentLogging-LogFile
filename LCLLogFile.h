@@ -243,6 +243,12 @@
                                 orString:(NSString *)string;
 
 
+
+// callback on file rotation
+
+typedef void (^OnRotateBlock)(NSString* fileName);
+@property (class) OnRotateBlock onRotate;
+
 @end
 
 

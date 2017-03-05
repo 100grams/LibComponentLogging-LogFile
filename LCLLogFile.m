@@ -812,6 +812,9 @@ static void _LCLLogFile_log(const char *identifier_c, uint32_t level,
         // keep a copy of the current log file
         if (_LCLLogFile_filePath_c != NULL && _LCLLogFile_filePath0_c != NULL) {
             rename(_LCLLogFile_filePath_c, _LCLLogFile_filePath0_c);
+            if (LCLLogFile.onRotate) {
+                LCLLogFile.onRotate(_LCLLogFile_filePath0_c);
+            }
         }
     }
     [_LCLLogFile_lock unlock];
@@ -919,6 +922,20 @@ static void _LCLLogFile_log(const char *identifier_c, uint32_t level,
         return bundleIdentifier;
     }
     return string;
+}
+
+#pragma mark - Rotation Callback
+
+static OnRotateBlock _onRotate;
+
++ (OnRotateBlock) onRotate
+{
+    return _onRotate;
+}
+
++ (void) setOnRotate:(OnRotateBlock)onRotate
+{
+    _onRotate = onRotate;
 }
 
 @end
